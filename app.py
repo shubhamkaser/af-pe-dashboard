@@ -177,3 +177,11 @@ st.plotly_chart(forecasts_vs_truth)
 
 error_rate = plot_error_rate(df_act_for)
 st.plotly_chart(error_rate)
+
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
