@@ -22,7 +22,7 @@ def multiple_line_plot(df_act_for, value_vars, id_vars):
         'yanchor': 'top'})
     return(fig_multi_line)
 
-def plot_forecasts_vs_truth(df_act_for, metric):
+def plot_forecasts_vs_truth(df_act_for, metric_selected):
     """Creates a plotly line plot showing forecasts and actual values on evaluation period.
     Returns
     -------
@@ -32,7 +32,7 @@ def plot_forecasts_vs_truth(df_act_for, metric):
     fig = px.line(
             df_act_for,
             x="date",
-            y=["act_"+metric, metric],
+            y=["act_" + metric_selected, metric_selected],
             color_discrete_sequence=config["colors"][1:],
             hover_data={"variable": True, "value": ":.2f", "date": False},
         )
@@ -53,7 +53,7 @@ def plot_forecasts_vs_truth(df_act_for, metric):
         ),
     )
     fig.update_layout(
-        yaxis_title=metric,
+        yaxis_title=metric_selected,
         legend_title_text="",
         height=500,
         width=1400,
