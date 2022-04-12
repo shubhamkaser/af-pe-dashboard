@@ -57,12 +57,16 @@ df_act_for_all.drop(columns=['act_date','act_series_id'], inplace=True)
 #Confirm with Linda
 df_act_for_all=df_act_for_all[~df_act_for_all['series_id'].str.endswith('FP')]
 
+#Add dropdown - Select Series ID 
 series_id = st.selectbox('Select Series ID', df_act_for_all.series_id.unique())
 df_act_for = df_act_for_all[df_act_for_all['series_id'] == series_id]
 
+#Add dropdown - Select Metric
+metric = st.selectbox('Select Metric', ['cost','clicks','impressions', 'orders'])
+
 #Plot Actual vs Forecast
 
-fig_act_vs_forecast = multiple_line_plot(df_act_for, value_vars=['cost','act_cost'], id_vars='date')
+fig_act_vs_forecast = multiple_line_plot(df_act_for, value_vars=[metric,'act_'+ metric], id_vars='date')
 st.plotly_chart(fig_act_vs_forecast)
 
 # Global Performance
@@ -96,7 +100,7 @@ def get_eval_df(metric):
   eval_df = pd.DataFrame(reform).T
   return(eval_df)
 
-metric_df = get_eval_df('cost')
+metric_df = get_eval_df(metric)
 
 metric_df = metric_df.reset_index()
 metric_df.columns = ['series_id','month','r2','rmse','mse','mae']
@@ -172,10 +176,10 @@ st.markdown('''
 ### Error Analysis
 ''')
 
-forecasts_vs_truth = plot_forecasts_vs_truth(df_act_for)
+forecasts_vs_truth = plot_forecasts_vs_truth(df_act_for, metric)
 st.plotly_chart(forecasts_vs_truth)
 
-error_rate = plot_error_rate(df_act_for)
+error_rate = plot_error_rate(df_act_for, metric)
 st.plotly_chart(error_rate)
 
 hide_streamlit_style = """

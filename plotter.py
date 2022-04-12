@@ -22,7 +22,7 @@ def multiple_line_plot(df_act_for, value_vars, id_vars):
         'yanchor': 'top'})
     return(fig_multi_line)
 
-def plot_forecasts_vs_truth(df_act_for):
+def plot_forecasts_vs_truth(df_act_for, metric):
     """Creates a plotly line plot showing forecasts and actual values on evaluation period.
     Returns
     -------
@@ -32,7 +32,7 @@ def plot_forecasts_vs_truth(df_act_for):
     fig = px.line(
             df_act_for,
             x="date",
-            y=["act_cost", "cost"],
+            y=["act_"+metric, metric],
             color_discrete_sequence=config["colors"][1:],
             hover_data={"variable": True, "value": ":.2f", "date": False},
         )
@@ -53,7 +53,7 @@ def plot_forecasts_vs_truth(df_act_for):
         ),
     )
     fig.update_layout(
-        yaxis_title='Cost',
+        yaxis_title=metric,
         legend_title_text="",
         height=500,
         width=1400,
@@ -64,8 +64,8 @@ def plot_forecasts_vs_truth(df_act_for):
     )
     return(fig)
 
-def plot_error_rate(df_act_for):
-    df_act_for['error'] = df_act_for['act_cost'] - df_act_for['cost']
+def plot_error_rate(df_act_for, metric):
+    df_act_for['error'] = df_act_for['act_'+metric] - df_act_for[metric]
     fig = px.line(
         df_act_for,
         x="date",
@@ -90,7 +90,7 @@ def plot_error_rate(df_act_for):
         ),
     )
     fig.update_layout(
-        yaxis_title='Cost',
+        yaxis_title=metric,
         legend_title_text="",
         height=500,
         width=1400,
